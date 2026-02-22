@@ -81,10 +81,6 @@ PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.1-impl-mock
 
 
-# HACK: Set vendor patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.bootimage.build.date.utc \
-    ro.build.date.utc
 
 # OEM otacert
 PRODUCT_EXTRA_RECOVERY_KEYS += \
