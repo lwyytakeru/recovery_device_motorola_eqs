@@ -43,6 +43,40 @@ Current state of features:
 - [x] Screenshot
 - [x] Advanced features
 
+# Optimization roadmap (Edge 30 Ultra - 12 GB / 256 GB)
+
+This tree is already in good shape for daily recovery use. If your goal is to improve reliability, speed and maintainability, prioritize the items below.
+
+## 1) Security hardening (highest priority)
+- Move from permissive SELinux to enforcing during normal operation and keep permissive only as a debug fallback.
+- Replace test AVB keys with dedicated release keys before official/public builds.
+- Keep anti-rollback bypass only for local testing builds; avoid it in release artifacts.
+
+## 2) Decryption and data stability
+- Validate FBE/FDE flow across cold boot, reboot to recovery and OTA sideload paths.
+- Test decryption with PIN/password/pattern and with multiple user profiles.
+- Add a simple regression checklist after each vendor blob update.
+
+## 3) Boot and recovery responsiveness
+- Benchmark boot-to-UI time before/after library/module updates.
+- Keep only required recovery binaries and shared libraries to reduce ramdisk pressure.
+- Review kernel module loading order to ensure only essential modules initialize in recovery.
+
+## 4) A/B and dynamic partition robustness
+- Recheck complete `AB_OTA_PARTITIONS` against stock payload metadata from the same firmware branch.
+- Validate fastbootd resize/flash paths for `super`, `vendor_dlkm` and `product`.
+- Confirm rollback and slot-switch behavior after failed sideload.
+
+## 5) Storage path optimization (UFS 3.1)
+- Validate fstab mount flags for `userdata` and metadata consistency with stock.
+- Run backup/restore stress tests with large archives (>50 GB) to detect throttling or mount edge-cases.
+- Validate NTFS/exFAT write behavior for external media workflows.
+
+## 6) Maintenance and long-term quality
+- Pin tree changes to specific stock firmware builds and document tested base version.
+- Track updated proprietary blobs by category (crypto, boot, display, vibrator) to simplify bisects.
+- Keep a short release checklist (decrypt, MTP, sideload, backup/restore, reboot targets).
+
 # Building
 ```bash
 export ALLOW_MISSING_DEPENDENCIES=true
